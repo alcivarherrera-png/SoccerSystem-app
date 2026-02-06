@@ -1,0 +1,26 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:ui="jakarta.faces.facelets"
+    xmlns:f="jakarta.faces.core" xmlns:p="http://primefaces.org/ui">
+
+    <div class="layout-topbar">
+        <h:form>
+            <p:menubar styleClass="border-none">
+                <p:menuitem value="Inicio" icon="pi pi-home" outcome="/index" />
+
+                <p:submenu label="Campeonatos" icon="pi pi-trophy">
+                    <p:menuitem value="Ver Todos" icon="pi pi-list" outcome="/campeonatos" />
+                    <p:menuitem value="Nuevo" icon="pi pi-plus"
+                        actionListener="#{campeonatoBean.mostrarFormularioNuevo()}" update=":mainForm"
+                        rendered="#{view.viewId eq '/campeonatos.xhtml'}" />
+                </p:submenu>
+
+                <f:facet name="options">
+                    <div class="flex align-items-center gap-2">
+                        <span class="text-secondary">Bienvenido</span>
+                        <p:avatar icon="pi pi-user" styleClass="mr-2" shape="circle" />
+                    </div>
+                </f:facet>
+            </p:menubar>
+        </h:form>
+    </div>
+
+</ui:composition>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:ui="jakarta.faces.facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/template/base.xhtml">
+    <ui:define name="title">Equipos del Campeonato</ui:define>
+
+    <ui:define name="content">
+        <h:form id="equiposForm">
+            <!-- Botón Volver -->
+            <p:button value="← Volver" outcome="detalle_campeonato" styleClass="btn-secondary"
+                style="margin-bottom: 20px; padding: 10px 20px !important;" />
+
+            <!-- Mensajes -->
+            <p:messages id="messages" showDetail="true" closable="true" />
+
+            <h:panelGroup rendered="#{campeonatoBean.campeonatoSeleccionado != null}">
+                <!-- Header -->
+                <div class="header">
+                    <h1>
+                        <h:outputText value="#{campeonatoBean.campeonatoSeleccionado.nombre}" />
+                    </h1>
+                </div>
+
+                <!-- Botón Crear Encuentro -->
+                <div style="text-align: right; margin-bottom: 20px;">
+                    <p:button value="Crear Encuentro" outcome="encuentro" styleClass="btn-secondary"
+                        style="background-color: #666 !important; color: white !important; border-color: #666 !important;" />
+                </div>
+
+                <!-- Sección Equipos del Campeonato -->
+                <div class="content-box">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <div>
+                            <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 4px;">
+                                <span style="margin-right: 8px;">👥</span>
+                                Equipos del Campeonato
+                            </h3>
+                            <p style="color: #666; font-size: 14px;">Administra los equipos y sus jugadores</p>
+                        </div>
+                        <p:commandButton value="+ Nuevo Equipo" onclick="PF('dlgNuevoEquipo').show()"
+                            styleClass="btn-primary" />
+                    </div>
+
+                    <!-- Diálogo Nuevo Equipo -->
+                    <p:dialog header="Nuevo Equipo" widgetVar="dlgNuevoEquipo" modal="true" responsive="true" width="400">
+                        <p:outputPanel id="nuevoEquipoPanel">
+                            <div class="form-group">
+                                <label class="form-label">Nombre del Equipo</label>
+                                <p:inputText value="#{equipoBean.equipo.nombreEquipo}"
+                                    placeholder="Ingresa el nombre del equipo" styleClass="ui-inputfield"
+                                    style="width:100%" />
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Color del Uniforme</label>
+                                <p:inputText value="#{equipoBean.equipo.colorUniforme}"
+                                    placeholder="Ej: #ff0000 o rojo" styleClass="ui-inputfield" style="width:100%" />
+                            </div>
+                        </p:outputPanel>
+                        <div class="button-group" style="margin-top:20px">
+                            <p:commandButton value="Crear Equipo" action="#{equipoBean.crearEquipo}"
+                                process="equiposForm:nuevoEquipoPanel"
+                                update="equiposForm:messages equiposForm:listaEquipos"
+                                oncomplete="if (!args.validationFailed) { PF('dlgNuevoEquipo').hide(); }"
+                                styleClass="btn-primary" />
+                        </div>
+                    </p:dialog>
+
+                    <!-- Diálogo Editar Equipo -->
+                    <p:dialog header="Editar Equipo" widgetVar="dlgEditarEquipo" modal="true" responsive="true" width="400">
+                        <p:outputPanel id="editarEquipoPanel">
+                            <div class="form-group">
+                                <label class="form-label">Nombre del Equipo</label>
+                                <p:inputText value="#{equipoBean.equipoSeleccionado.nombreEquipo}"
+                                    styleClass="ui-inputfield" style="width:100%" />
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Color del Uniforme</label>
+                                <p:inputText value="#{equipoBean.equipoSeleccionado.colorUniforme}"
+                                    styleClass="ui-inputfield" style="width:100%" />
+                            </div>
+                        </p:outputPanel>
+                        <div class="button-group" style="margin-top:20px">
+                            <p:commandButton value="Guardar" action="#{equipoBean.actualizarEquipo}"
+                                process="equiposForm:editarEquipoPanel"
+                                update="equiposForm:messages equiposForm:listaEquipos"
+                                oncomplete="if (!args.validationFailed) { PF('dlgEditarEquipo').hide(); }"
+                                styleClass="btn-primary" />
+                        </div>
+                    </p:dialog>
+
+                    <p:outputPanel id="listaEquipos">
+                        <ui:repeat value="#{campeonatoBean.campeonatoSeleccionado.equipos}" var="e">
+                            <div class="card-item">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="flex: 1;">
+                                        <div style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">
+                                            <h:outputText value="#{e.nombreEquipo}" />
+                                        </div>
+                                        <div style="font-size: 14px; color: #666; display: flex; align-items: center; gap: 6px;">
+                                            <span>👥</span>
+                                            <h:outputText value="#{e.cantidadJugadores} jugadores en el roster" />
+                                        </div>
+                                    </div>
+                                    <div style="display: flex; gap: 8px;">
+                                        <p:commandButton value="✏️" action="#{equipoBean.prepararEditar(e)}"
+                                            update="equiposForm:messages"
+                                            oncomplete="PF('dlgEditarEquipo').show()"
+                                            styleClass="btn-secondary"
+                                            style="width: 40px; height: 40px; padding: 0 !important;" />
+                                        <p:commandButton value="🗑️" action="#{equipoBean.eliminarEquipo(e)}"
+                                            update="equiposForm:messages equiposForm:listaEquipos"
+                                            styleClass="btn-danger" style="width: 40px; height: 40px; padding: 0 !important;">
+                                            <p:confirm header="Confirmar" message="¿Eliminar el equipo?" icon="pi pi-exclamation-triangle" />
+                                        </p:commandButton>
+                                    </div>
+                                </div>
+                            </div>
+                        </ui:repeat>
+                    </p:outputPanel>
+                </div>
+            </h:panelGroup>
+
+            <h:panelGroup rendered="#{campeonatoBean.campeonatoSeleccionado == null}">
+                <div class="content-box">
+                    <h3>No hay campeonato seleccionado</h3>
+                    <p>Vuelve al detalle del campeonato para administrar los equipos.</p>
+                </div>
+            </h:panelGroup>
+
+            <p:confirmDialog global="true">
+                <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes btn-danger" />
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no btn-secondary" />
+            </p:confirmDialog>
+        </h:form>
+    </ui:define>
+</ui:composition>
+
+</html>

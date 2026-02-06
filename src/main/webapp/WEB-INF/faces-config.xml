@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<faces-config version="4.0"
+              xmlns="https://jakarta.ee/xml/ns/jakartaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-facesconfig_4_0.xsd">
+
+    <!-- Reglas de navegación explícitas (opcional con JSF moderno, pero útil para documentación) -->
+    
+    <!-- Desde Index -->
+    <navigation-rule>
+        <from-view-id>/index.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>verEquipos</from-outcome>
+            <to-view-id>/equipos.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+    </navigation-rule>
+
+    <!-- Desde Equipos -->
+    <navigation-rule>
+        <from-view-id>/equipos.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>volverInicio</from-outcome>
+            <to-view-id>/index.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>verJugadores</from-outcome>
+            <to-view-id>/jugadores.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>crearEncuentro</from-outcome>
+            <to-view-id>/encuentro.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+    </navigation-rule>
+
+    <!-- Desde Jugadores -->
+    <navigation-rule>
+        <from-view-id>/jugadores.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>volverEquipos</from-outcome>
+            <to-view-id>/equipos.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+    </navigation-rule>
+
+    <!-- Desde Encuentro -->
+    <navigation-rule>
+        <from-view-id>/encuentro.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>volverEquipos</from-outcome>
+            <to-view-id>/equipos.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+    </navigation-rule>
+
+</faces-config>

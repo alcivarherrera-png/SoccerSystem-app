@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:ui="jakarta.faces.facelets"
+    xmlns:f="jakarta.faces.core" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/template/base.xhtml">
+    <ui:define name="title">Gestión de Campeonatos</ui:define>
+
+    <ui:define name="content">
+        <h:form id="mainForm">
+            <!-- Header -->
+            <div class="header">
+                <div style="margin-bottom: 20px;">
+                    <img src="#{request.contextPath}/images/logo.jpeg" alt="Soccer System Logo"
+                        style="max-width: 200px; height: auto; border-radius: 50%;" />
+                </div>
+                <h1>
+                    <span class="trophy-icon">🏆</span>
+                    Gestión de Campeonatos
+                </h1>
+                <div class="subtitle">Crea y administra campeonatos de la Liga Barrial</div>
+            </div>
+
+            <!-- Mensajes -->
+            <p:messages id="messages" showDetail="true" closable="true" />
+
+            <!-- Botonera Superior -->
+            <div style="margin-bottom: 20px; display: flex; gap: 10px;">
+                <p:button value="Volver al Inicio" outcome="index" icon="pi pi-arrow-left" styleClass="btn-secondary" />
+
+                <p:commandButton value="+ Crear Nuevo Campeonato" type="button" styleClass="btn-primary"
+                    onclick="PF('dlgNuevo').show()"
+                    style="flex: 1; padding: 16px 0 !important; font-size: 16px !important;" />
+            </div>
+
+            <!-- Diálogo Nuevo Campeonato -->
+            <p:dialog header="Nuevo Campeonato" widgetVar="dlgNuevo" modal="true" responsive="true" width="400">
+                <div class="form-group">
+                    <label class="form-label">Nombre del Campeonato</label>
+                    <p:inputText value="#{campeonatoBean.campeonato.nombre}"
+                        placeholder="Ej: Torneo de Verano 2024" styleClass="ui-inputfield" style="width:100%" />
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Fecha de Inicio</label>
+                    <p:datePicker value="#{campeonatoBean.campeonato.fechaInicio}"
+                        placeholder="dd/mm/aaaa" pattern="dd/MM/yyyy" showIcon="true"
+                        styleClass="ui-inputfield" style="width:100%">
+                        <f:convertDateTime pattern="dd/MM/yyyy" type="localDate" />
+                    </p:datePicker>
+                </div>
+                <div class="button-group" style="margin-top:20px">
+                    <p:commandButton value="Crear Campeonato" action="#{campeonatoBean.crearCampeonato}"
+                        update="mainForm:messages mainForm:tablaCampeonatos"
+                        oncomplete="if (!args.validationFailed) { PF('dlgNuevo').hide(); }"
+                        styleClass="btn-primary" />
+                </div>
+            </p:dialog>
+
+            <!-- Lista de Campeonatos -->
+            <div class="content-box">
+                <h3 style="margin-bottom: 20px; font-size: 20px;">Campeonatos Existentes</h3>
+                <p:dataTable id="tablaCampeonatos" value="#{campeonatoBean.campeonatos}" var="c"
+                    emptyMessage="No hay campeonatos registrados" styleClass="ui-datatable-striped">
+                    <p:column headerText="Campeonato">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span>🏆</span>
+                            <h:outputText value="#{c.nombre}" />
+                        </div>
+                    </p:column>
+                    <p:column headerText="Fecha de Inicio">
+                        <h:outputText value="#{c.fechaInicio}">
+                            <f:convertDateTime pattern="dd/MM/yyyy" type="localDate" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Equipos">
+                        <h:outputText value="#{c.cantidadEquipos}" />
+                    </p:column>
+                    <p:column headerText="Acciones" style="width: 220px;">
+                        <p:commandButton value="Ver Detalle" action="#{campeonatoBean.verDetalleCampeonato(c)}"
+                            icon="pi pi-eye" styleClass="btn-secondary" process="@this" immediate="true" />
+                        <p:commandButton value="Eliminar" action="#{campeonatoBean.eliminarCampeonato(c)}"
+                            update="mainForm:messages mainForm:tablaCampeonatos" icon="pi pi-trash"
+                            styleClass="btn-danger" process="@this" immediate="true">
+                            <p:confirm header="Confirmar" message="¿Eliminar el campeonato?" icon="pi pi-exclamation-triangle" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </div>
+
+            <p:confirmDialog global="true">
+                <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes btn-danger" />
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no btn-secondary" />
+            </p:confirmDialog>
+        </h:form>
+    </ui:define>
+</ui:composition>
+
+</html>

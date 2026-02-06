@@ -1,0 +1,32 @@
+services:
+  db:
+    image: postgres:${POSTGRES_VERSION}
+    container_name: ${DB_SERVER_NAME}
+    env_file:
+      - docker-env
+    ports:
+      - "${DB_PGSQL_PORT_PUBLIC}:5432"
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - ${LOCAL_DATA_DIR_BD}:/var/lib/postgresql/data
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: soccersystem-app:v1
+    env_file:
+      - docker-env
+    depends_on:
+      - db
+    ports:
+      - "9080:9080"
+    environment:
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_SERVER_NAME: ${DB_SERVER_NAME}
+      DB_PORT_NUMBER: 5432

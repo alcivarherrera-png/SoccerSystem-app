@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:ui="jakarta.faces.facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/template/base.xhtml">
+    <ui:define name="title">Inicio - Soccer System</ui:define>
+
+    <ui:define name="content">
+        <div class="dashboard-container" style="text-align: center; padding: 40px 20px;">
+
+            <div style="margin-bottom: 30px;">
+                <img src="#{request.contextPath}/images/logo.jpeg" alt="Soccer System Logo"
+                    style="max-width: 150px; height: auto; border-radius: 50%; box-shadow: 0 4px 15px rgba(0,0,0,0.1);" />
+            </div>
+
+            <h1 style="font-size: 2.5rem; color: #2c3e50; margin-bottom: 10px;">
+                Bienvenido a Soccer System
+            </h1>
+            <p style="font-size: 1.2rem; color: #7f8c8d; max-width: 600px; margin: 0 auto 40px;">
+                Sistema integral para la gestión de campeonatos, equipos, jugadores y encuentros deportivos.
+            </p>
+
+            <div class="grid-dashboard"
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; max-width: 1000px; margin: 0 auto;">
+
+                <!-- Card Campeonatos -->
+                <div class="dashboard-card"
+                    style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: transform 0.2s;">
+                    <div style="font-size: 40px; margin-bottom: 15px;">🏆</div>
+                    <h3 style="color: #2c3e50; margin-bottom: 10px;">Campeonatos</h3>
+                    <p style="color: #95a5a6; margin-bottom: 20px;">Administra torneos y sus configuraciones.</p>
+                    <p:button value="Gestionar" outcome="campeonatos" styleClass="btn-primary" style="width: 100%;" />
+                </div>
+
+                <!-- Card Equipos -->
+                <div class="dashboard-card"
+                    style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: transform 0.2s;">
+                    <div style="font-size: 40px; margin-bottom: 15px;">👕</div>
+                    <h3 style="color: #2c3e50; margin-bottom: 10px;">Equipos</h3>
+                    <p style="color: #95a5a6; margin-bottom: 20px;">Gestiona los equipos participantes.</p>
+                    <!-- Note: In current logic, teams are inside championships, but maybe a direct link? 
+                         If teams require a championship selection, maybe link to campeonatos or a global list?
+                         For now, let's link to campeonatos as entry point -->
+                    <p:button value="Ver Equipos via Torneo" outcome="campeonatos" styleClass="btn-secondary"
+                        style="width: 100%;" />
+                </div>
+
+                <!-- Card Jugadores -->
+                <div class="dashboard-card"
+                    style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: transform 0.2s;">
+                    <div style="font-size: 40px; margin-bottom: 15px;">🏃</div>
+                    <h3 style="color: #2c3e50; margin-bottom: 10px;">Jugadores</h3>
+                    <p style="color: #95a5a6; margin-bottom: 20px;">Base de datos de deportistas.</p>
+                    <p:button value="Ver Jugadores via Equipos" outcome="campeonatos" styleClass="btn-secondary"
+                        style="width: 100%;" />
+                </div>
+
+                <!-- Card Encuentros -->
+                <div class="dashboard-card"
+                    style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: transform 0.2s;">
+                    <div style="font-size: 40px; margin-bottom: 15px;">VS</div>
+                    <h3 style="color: #2c3e50; margin-bottom: 10px;">Encuentros</h3>
+                    <p style="color: #95a5a6; margin-bottom: 20px;">Programación y resultados de partidos.</p>
+                    <p:button value="Gestionar Partidos" outcome="campeonatos" styleClass="btn-secondary"
+                        style="width: 100%;" />
+                </div>
+
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>
+
+</html>

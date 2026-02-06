@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence
+             https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
+             version="3.0">
+
+    <persistence-unit name="SoccerSystemPU" transaction-type="JTA">
+        <!-- Clases de entidad -->
+        <jta-data-source>jdbc/SoccerDS</jta-data-source>
+
+        <class>unl.edu.cc.soccersystem.domain.Campeonato</class>
+        <class>unl.edu.cc.soccersystem.domain.Equipo</class>
+        <class>unl.edu.cc.soccersystem.domain.Jugador</class>
+        <class>unl.edu.cc.soccersystem.domain.Encuentro</class>
+        <class>unl.edu.cc.soccersystem.domain.Sancion</class>
+        <class>unl.edu.cc.soccersystem.domain.EstadisticasPartido</class>
+
+
+        <properties>
+            <property name="jakarta.persistence.schema-generation.database.action" value="none"/>
+        </properties>
+
+    </persistence-unit>
+</persistence>

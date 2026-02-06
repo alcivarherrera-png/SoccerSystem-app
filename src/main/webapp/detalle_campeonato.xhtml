@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:ui="jakarta.faces.facelets"
+    xmlns:f="jakarta.faces.core" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/template/base.xhtml">
+    <ui:define name="title">Detalle del Campeonato</ui:define>
+
+    <ui:define name="content">
+        <h:form id="detalleForm">
+            <!-- Botón Volver -->
+            <p:commandButton value="← Volver a Campeonatos" action="campeonatos?faces-redirect=true"
+                styleClass="btn-secondary" style="margin-bottom: 20px; padding: 10px 20px !important;" />
+
+            <!-- Mensajes -->
+            <p:messages id="messages" showDetail="true" closable="true" />
+
+            <h:panelGroup rendered="#{campeonatoBean.campeonatoSeleccionado != null}">
+                <!-- Header y Acciones Principales -->
+                <div class="header">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h1>
+                            <span class="trophy-icon">🏆</span>
+                            <h:outputText value="#{campeonatoBean.campeonatoSeleccionado.nombre}" />
+                        </h1>
+                        <div style="display: flex; gap: 10px;">
+                            <p:commandButton value="Guardar Cambios" action="#{campeonatoBean.actualizarCampeonato}"
+                                update="detalleForm:messages" icon="pi pi-save" styleClass="btn-primary" />
+                            <p:commandButton value="Eliminar Campeonato"
+                                action="#{campeonatoBean.eliminarCampeonatoActual}" icon="pi pi-trash"
+                                styleClass="btn-danger">
+                                <p:confirm header="Confirmar" message="¿Eliminar el campeonato?" icon="pi pi-exclamation-triangle" />
+                            </p:commandButton>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Información General -->
+                <div class="content-box">
+                    <h3 style="margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">Información
+                        General</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="form-group">
+                            <label class="form-label">Nombre del Campeonato</label>
+                            <p:inputText value="#{campeonatoBean.campeonatoSeleccionado.nombre}"
+                                styleClass="ui-inputfield" style="width: 100%;" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Fecha de Inicio</label>
+                            <p:datePicker value="#{campeonatoBean.campeonatoSeleccionado.fechaInicio}"
+                                pattern="dd/MM/yyyy" showIcon="true" styleClass="ui-inputfield"
+                                style="width: 100%;">
+                                <f:convertDateTime pattern="dd/MM/yyyy" type="localDate" />
+                            </p:datePicker>
+                        </div>
+                    </div>
+                </div>
+
+                <p:tabView style="margin-top: 20px;">
+                    <!-- Pestaña de Equipos -->
+                    <p:tab title="Equipos (#{campeonatoBean.campeonatoSeleccionado.cantidadEquipos})">
+                        <ui:repeat value="#{campeonatoBean.campeonatoSeleccionado.equipos}" var="e">
+                            <div class="card-item">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div>
+                                        <h4 style="margin: 0; font-size: 1.1rem; color: #2c3e50;">
+                                            <h:outputText value="#{e.nombreEquipo}" />
+                                        </h4>
+                                        <span style="font-size: 0.9rem; color: #7f8c8d;">
+                                            <h:outputText value="#{e.cantidadJugadores} jugadores" />
+                                        </span>
+                                    </div>
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <div
+                                            style="width: 20px; height: 20px; border-radius: 50%; background-color: #{empty e.colorUniforme ? '#cccccc' : e.colorUniforme}; border: 1px solid #ddd;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ui:repeat>
+
+                        <div style="margin-top: 20px; text-align: right;">
+                            <p:button value="Ir a Gestión de Equipos" outcome="equipos" styleClass="btn-secondary"
+                                icon="pi pi-users" />
+                        </div>
+                    </p:tab>
+                </p:tabView>
+            </h:panelGroup>
+
+            <h:panelGroup rendered="#{campeonatoBean.campeonatoSeleccionado == null}">
+                <div class="content-box">
+                    <h3>No hay campeonato seleccionado</h3>
+                    <p>Vuelve a la lista y selecciona un campeonato para ver el detalle.</p>
+                </div>
+            </h:panelGroup>
+
+            <p:confirmDialog global="true">
+                <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes btn-danger" />
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no btn-secondary" />
+            </p:confirmDialog>
+        </h:form>
+    </ui:define>
+</ui:composition>
+
+</html>
